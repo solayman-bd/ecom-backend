@@ -69,6 +69,7 @@ const getSearchedProductsFromDb = async (
   let query = {};
   if (searchTerm) {
     const regex = new RegExp(searchTerm, 'i');
+    //Since the requirements did not specify which field of the product to use for the search, I chose to search in both the name and description fields.
     query = { $or: [{ name: regex }, { description: regex }] };
   }
   const result = await ProductModel.find(query);
