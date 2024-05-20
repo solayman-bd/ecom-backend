@@ -1,4 +1,4 @@
-import { ProductNotFoundError } from '../../config/helper';
+import { RequestedItemNotFoundError } from '../../config/helper';
 import { ProductModel } from '../products/products.model';
 import { IOrderRequest } from './order.interference';
 import { OrderModel } from './order.model';
@@ -15,7 +15,7 @@ const createANewOrder = async (
 const getAllOrders = async (): Promise<(IOrderRequest & Document)[]> => {
   const result = await OrderModel.find({}).select('-__v');
   if (result.length === 0) {
-    throw new ProductNotFoundError('No products found');
+    throw new RequestedItemNotFoundError('No orders found');
   }
   return result;
 };
@@ -24,7 +24,7 @@ const getOrdersByEmail = async (
 ): Promise<IOrderRequest[]> => {
   const result = await OrderModel.find({ email: searchTerm });
   if (result.length === 0) {
-    throw new ProductNotFoundError(
+    throw new RequestedItemNotFoundError(
       `No order found by this email : ${searchTerm}`,
     );
   }

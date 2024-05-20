@@ -1,4 +1,7 @@
-import { ProductNotFoundError, validateProductId } from '../../config/helper';
+import {
+  RequestedItemNotFoundError,
+  validateProductId,
+} from '../../config/helper';
 import { IProduct } from './products.interface';
 import { ProductModel } from './products.model';
 import { Document } from 'mongoose';
@@ -14,7 +17,7 @@ const addAProductToDb = async (
 const getAllProductsFromDb = async (): Promise<(IProduct & Document)[]> => {
   const result = await ProductModel.find({}).select('-__v');
   if (result.length === 0) {
-    throw new ProductNotFoundError('No products found');
+    throw new RequestedItemNotFoundError('No products found');
   }
   return result;
 };
@@ -26,7 +29,7 @@ const getASingleProductFromDb = async (
 
   const result = await ProductModel.findById(productId);
   if (!result) {
-    throw new ProductNotFoundError('Product not found');
+    throw new RequestedItemNotFoundError('Product not found');
   }
   return result;
 };
@@ -43,7 +46,7 @@ const updateAProduct = async (
     { new: true },
   );
   if (!result) {
-    throw new ProductNotFoundError('Product not found');
+    throw new RequestedItemNotFoundError('Product not found');
   }
   return result;
 };
@@ -55,7 +58,7 @@ const deleteASingleProductFromDb = async (
 
   const result = await ProductModel.findByIdAndDelete(productId);
   if (!result) {
-    throw new ProductNotFoundError('Product not found');
+    throw new RequestedItemNotFoundError('Product not found');
   }
   return result;
 };
@@ -70,7 +73,7 @@ const getSearchedProductsFromDb = async (
   }
   const result = await ProductModel.find(query);
   if (result.length === 0) {
-    throw new ProductNotFoundError('No products found');
+    throw new RequestedItemNotFoundError('No products found');
   }
   return result;
 };

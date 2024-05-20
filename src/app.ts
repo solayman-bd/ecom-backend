@@ -11,7 +11,7 @@ app.use(cors());
 
 const checkConnection = (req: Request, res: Response) => {
   res.json({
-    message: 'Running',
+    message: 'Server is Running Successfully',
   });
 };
 app.get('/', checkConnection);

@@ -6,10 +6,10 @@ export const validateProductId = (productId: string): void => {
   }
 };
 
-export class ProductNotFoundError extends Error {
+export class RequestedItemNotFoundError extends Error {
   constructor(message: string) {
     super(message);
-    this.name = 'ProductNotFoundError';
+    this.name = 'RequestedItemNotFoundError';
   }
 }
 export const handleErrorResponse = (res: Response, error: unknown): void => {
@@ -23,7 +23,7 @@ export const handleErrorResponse = (res: Response, error: unknown): void => {
 
 export const handleNotFoundError = (
   res: Response,
-  error: ProductNotFoundError,
+  error: RequestedItemNotFoundError,
 ): void => {
   res.status(404).json({
     success: false,

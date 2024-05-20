@@ -4,7 +4,7 @@ import { orderService } from './order.service';
 import { ValidationError } from 'joi';
 import { Document } from 'mongoose';
 import {
-  ProductNotFoundError,
+  RequestedItemNotFoundError,
   handleErrorResponse,
   handleNotFoundError,
   handleSuccessResponse,
@@ -69,7 +69,7 @@ const getAllOrdersFromDb = async (
       : await orderService.getAllOrders();
     handleSuccessResponse(res, 'Orders fetched successfully', result);
   } catch (error) {
-    if (error instanceof ProductNotFoundError) {
+    if (error instanceof RequestedItemNotFoundError) {
       handleNotFoundError(res, error);
     } else {
       handleErrorResponse(res, error);

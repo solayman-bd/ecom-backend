@@ -4,7 +4,7 @@ import { ProductService } from './products.service';
 import { ValidationError } from 'joi';
 import { IProduct } from './products.interface';
 import {
-  ProductNotFoundError,
+  RequestedItemNotFoundError,
   handleErrorResponse,
   handleNotFoundError,
   handleSuccessResponse,
@@ -31,7 +31,7 @@ const addProductToDb = async (req: Request, res: Response): Promise<void> => {
     const result = await ProductService.addAProductToDb(productData);
     handleSuccessResponse(res, 'Product is created successfully', result);
   } catch (error) {
-    if (error instanceof ProductNotFoundError) {
+    if (error instanceof RequestedItemNotFoundError) {
       handleNotFoundError(res, error);
     } else {
       handleErrorResponse(res, error);
@@ -50,7 +50,7 @@ const getAllProductsFromDb = async (
       : await ProductService.getAllProductsFromDb();
     handleSuccessResponse(res, 'Products fetched successfully', result);
   } catch (error) {
-    if (error instanceof ProductNotFoundError) {
+    if (error instanceof RequestedItemNotFoundError) {
       handleNotFoundError(res, error);
     } else {
       handleErrorResponse(res, error);
@@ -67,7 +67,7 @@ const getASingleProductFromDb = async (
     const result = await ProductService.getASingleProductFromDb(id);
     handleSuccessResponse(res, 'Product fetched successfully!', result);
   } catch (error) {
-    if (error instanceof ProductNotFoundError) {
+    if (error instanceof RequestedItemNotFoundError) {
       handleNotFoundError(res, error);
     } else {
       handleErrorResponse(res, error);
@@ -83,7 +83,7 @@ const updateAProduct = async (req: Request, res: Response): Promise<void> => {
     const result = await ProductService.updateAProduct(id, updatedData);
     handleSuccessResponse(res, 'Product updated successfully!', result);
   } catch (error) {
-    if (error instanceof ProductNotFoundError) {
+    if (error instanceof RequestedItemNotFoundError) {
       handleNotFoundError(res, error);
     } else {
       handleErrorResponse(res, error);
@@ -100,7 +100,7 @@ const deleteASingleProductFromDb = async (
     await ProductService.deleteASingleProductFromDb(id);
     handleSuccessResponse(res, 'Product deleted successfully!', null);
   } catch (error) {
-    if (error instanceof ProductNotFoundError) {
+    if (error instanceof RequestedItemNotFoundError) {
       handleNotFoundError(res, error);
     } else {
       handleErrorResponse(res, error);
