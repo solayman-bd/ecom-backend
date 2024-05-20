@@ -1,30 +1,18 @@
+import { ProductNotFoundError, validateProductId } from '../../config/helper';
 import { IProduct } from './products.interface';
 import { ProductModel } from './products.model';
-import { Document, Types } from 'mongoose';
-
-const validateProductId = (productId: string): void => {
-  if (!Types.ObjectId.isValid(productId)) {
-    throw new Error('Invalid product ID');
-  }
-};
-
-export class ProductNotFoundError extends Error {
-  constructor(message: string) {
-    super(message);
-    this.name = 'ProductNotFoundError';
-  }
-}
+import { Document } from 'mongoose';
 
 const addAProductToDb = async (
   product: IProduct,
 ): Promise<IProduct & Document> => {
   const productInstance = new ProductModel(product);
   const result = await productInstance.save();
-  return result;
+  return result.toObject({ versionKey: false });
 };
 
 const getAllProductsFromDb = async (): Promise<(IProduct & Document)[]> => {
-  const result = await ProductModel.find({});
+  const result = await ProductModel.find({}).select('-__v');
   if (result.length === 0) {
     throw new ProductNotFoundError('No products found');
   }

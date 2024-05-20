@@ -1,38 +1,14 @@
 import { Request, Response } from 'express';
 import { productValidationSchema } from './product.validator';
-import { ProductNotFoundError, ProductService } from './products.service';
+import { ProductService } from './products.service';
 import { ValidationError } from 'joi';
-
-const handleErrorResponse = (res: Response, error: unknown): void => {
-  const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-  res.status(500).json({
-    success: false,
-    message: 'Something went wrong',
-    error: errorMessage,
-  });
-};
-
-const handleNotFoundError = (
-  res: Response,
-  error: ProductNotFoundError,
-): void => {
-  res.status(404).json({
-    success: false,
-    message: error.message,
-  });
-};
-
-const handleSuccessResponse = (
-  res: Response,
-  message: string,
-  data: any,
-): void => {
-  res.status(200).json({
-    success: true,
-    message,
-    data,
-  });
-};
+import { IProduct } from './products.interface';
+import {
+  ProductNotFoundError,
+  handleErrorResponse,
+  handleNotFoundError,
+  handleSuccessResponse,
+} from '../../config/helper';
 
 const validateProductData = (productData: any): ValidationError | null => {
   const { error } = productValidationSchema.validate(productData);
@@ -41,7 +17,7 @@ const validateProductData = (productData: any): ValidationError | null => {
 
 const addProductToDb = async (req: Request, res: Response): Promise<void> => {
   try {
-    const productData = req.body;
+    const productData: IProduct = req.body;
     const validationError = validateProductData(productData);
     if (validationError) {
       res.status(400).json({
