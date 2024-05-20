@@ -1,8 +1,8 @@
-import mongoose from "mongoose";
-import config from "./app/config";
-import app from "./app";
+import mongoose from 'mongoose';
+import config from './app/config';
+import app from './app';
 
-const port: string = config.port as string;
+const port: string | number = (config.port as string) || 5000;
 
 async function main() {
   try {
