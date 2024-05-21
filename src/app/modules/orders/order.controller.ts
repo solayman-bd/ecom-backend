@@ -22,6 +22,7 @@ const createANewOrder = async (req: Request, res: Response): Promise<void> => {
   try {
     const data: IOrderRequest = req.body;
     const validationError = validateOrderData(data);
+    // Validating order data
     if (validationError) {
       res.status(400).json({
         success: false,
@@ -35,8 +36,10 @@ const createANewOrder = async (req: Request, res: Response): Promise<void> => {
         await ProductService.getASingleProductFromDb(productId);
       const availableQuantity = (productInfo as IProduct & Document).inventory
         .quantity;
+      // Checking product availability
       if (availableQuantity != 0 && availableQuantity >= data.quantity) {
         const result = await orderService.createANewOrder(data);
+        // Updating product inventory data
         const updateData = {
           inventory: {
             quantity: availableQuantity - data.quantity,
