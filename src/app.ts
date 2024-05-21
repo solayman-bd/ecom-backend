@@ -5,7 +5,7 @@ import { OrderRoutes } from './app/modules/orders/order.route';
 
 const app: Application = express();
 
-//parsers
+// Middlewares
 app.use(express.json());
 app.use(cors());
 
@@ -19,6 +19,7 @@ app.get('/', checkConnection);
 app.use('/api/products', ProductsRoutes);
 app.use('/api/orders', OrderRoutes);
 
+// 404 Handler
 app.use((req, res, next) => {
   res.status(404).json({
     success: false,
